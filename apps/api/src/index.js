@@ -1,6 +1,7 @@
 const { join } = require("path");
 require("dotenv").config({ path: join(__dirname, "../.env") });
 const express = require("express");
+const { log } = require("console");
 const PORT = process.env.PORT || 2500;
 const app = express();
 app.use(express.json());
@@ -38,6 +39,7 @@ app.use(express.static(join(__dirname, clientPath)));
 app.get("*", (req, res) => {
   res.sendFile(join(__dirname, clientPath, "index.html"));
 });
+
 
 //#endregion
 app.listen(PORT, () => console.log(`API RUNNING at `, PORT));
