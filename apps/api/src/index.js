@@ -27,7 +27,9 @@ app.use((err, req, res, next) => {
     console.error("Error : ", err);
     res.status(500).send(err);
   } else {
-    next();
+    console.error("ERROR HANDLING: ",err.stack);
+    return res.status(err.rc || 500).json(err);
+    // next();
   }
 });
 
