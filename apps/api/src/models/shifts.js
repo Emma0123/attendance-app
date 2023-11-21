@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      shifts.hasMany(models.attendances, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     }
   }
   shifts.init({
@@ -21,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'shifts',
+    paranoid:true
   });
   return shifts;
 };
