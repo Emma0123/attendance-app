@@ -10,16 +10,21 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       email: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.ENUM('hr', 'employee')
+        allowNull: false,
+        type: Sequelize.ENUM('hr', 'employee'),
+        defaultValue: 'employee'
       },
       deletedAt: {
         type: Sequelize.DATE
