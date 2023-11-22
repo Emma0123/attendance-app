@@ -1,3 +1,6 @@
 // import router here
 // examp : const usersRouter = require("./users");
-module.exports = {};
+const resetPasswordRouter = require('./resetPassword')
+module.exports = {
+    resetPasswordRouter,
+};

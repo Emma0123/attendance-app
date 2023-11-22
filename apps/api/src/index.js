@@ -1,16 +1,20 @@
 const { join } = require("path");
 require("dotenv").config({ path: join(__dirname, "../.env") });
 const express = require("express");
+const cors = require("cors");
 const { log } = require("console");
+const { resetPasswordRouter } = require("./router");
 const PORT = process.env.PORT || 2500;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get("/api", (req, res) => {
   res.status(200).send("<h1>API in TURBOREPO</h1>");
 });
 
 // #define route here
+app.use('/reset', resetPasswordRouter)
 
 // not found
 app.use((req, res, next) => {
