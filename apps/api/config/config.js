@@ -1,5 +1,5 @@
 const { join } = require('path');
-require('dotenv').config({ path: join(__dirname, '../../.env') });
+require('dotenv').config({ path: join(__dirname, '../.env') });
 
 module.exports = {
   development: {
@@ -11,16 +11,16 @@ module.exports = {
   },
   test: {
     username: "root",
-    password: null,
+    password: "null",
     database: "database_test",
     host: "127.0.0.1",
-    dialect: "mysql",
+    dialect: "mysql"
   },
   production: {
     username: "root",
-    password: null,
+    password: "null",
     database: "database_production",
     host: "127.0.0.1",
-    dialect: "mysql",
-  },
-};
+    dialect: "mysql"
+  }
+}

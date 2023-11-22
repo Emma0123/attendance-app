@@ -1,10 +1,11 @@
 const { join } = require("path");
 require("dotenv").config({ path: join(__dirname, "../.env") });
 const express = require("express");
+const { log } = require("console");
 const PORT = process.env.PORT || 2500;
 const app = express();
 const bearerToken = require("express-bearer-token")
-const cors = require("cors")
+const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 app.use(bearerToken())
@@ -14,6 +15,8 @@ app.get("/api", (req, res) => {
 });
 
 // #define route here
+const { usersRouter } = require("./router");
+app.use("/users", usersRouter)
 
 // not found
 app.use((req, res, next) => {
@@ -42,6 +45,7 @@ app.use(express.static(join(__dirname, clientPath)));
 app.get("*", (req, res) => {
   res.sendFile(join(__dirname, clientPath, "index.html"));
 });
+
 
 //#endregion
 app.listen(PORT, () => console.log(`API RUNNING at `, PORT));

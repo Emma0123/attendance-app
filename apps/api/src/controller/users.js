@@ -20,16 +20,12 @@ module.exports = {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(req.body.password, salt);
       req.body.password = hashPassword;
-      const result = await users.create({
-        username: req.body.username,
-        password: req.body.password,
-        role: "employee",
-      });
+      const result = await users.create(req.body);
       const token = jwt.sign(
         {
           id: result.id,
           username: result.username,
-          role: result.token,
+          role: result.role,
         },
         process.env.SCRT_TKN,
         {
@@ -47,6 +43,7 @@ module.exports = {
       next(errorResponse(500, false, "Error Register", null, error.message));
     }
   },
+
   loginAcc: async (req, res, next) => {
     try {
       const result = await users.findOne({
@@ -55,32 +52,68 @@ module.exports = {
         },
         raw: true,
       });
+      console.log("INI RESULT BREE", result);
       const checkAcc = await bcrypt.compare(req.body.password, result.password);
-      if(checkAcc) {
-        const {id, username, password, role} = result
-        const token =  jwt.sign(
+      if (checkAcc) {
+        delete result.password;
+        const { id, username, email, password, role } = result;
+        const token = jwt.sign(
           {
             id,
             username,
-            role
+            email,
+            role,
           },
           process.env.SCRT_TKN,
           {
-            expiresIn: "1h"
+            expiresIn: "1h",
           }
-        )
+        );
 
         return res.status(201).send({
           succes: true,
           result: {
-            username,
-            role,
-            token
-          }
-        })
+            ...result,
+            token,
+          },
+        });
+      } else {
+        return res.status(400).send({
+          succes: false,
+          message: "You unauthenticate",
+        });
       }
     } catch (error) {
       next(errorResponse(500, false, "Error Register", null, error.message));
+    }
+  },
+
+  keepLogin: async (req, res, next) => {
+    try {
+      console.log("bree ini usersData", req.usersData);
+      const result = await users.findOne({
+        where: {
+          id: req.usersData.id,
+        },
+        raw: true,
+      });
+      const { id, username, email, password, role } = result;
+      const token = jwt.sign(
+        { id, username, email, role },
+        process.env.SCRT_TKN,
+        {
+            expiresIn: "1h"
+        }
+      );
+      return res.status(200).send({
+        succes: true,
+        result: {
+            ...result,
+            token
+        }
+      })
+    } catch (error) {
+      next(errorResponse(500, false, "Error Keep Login", null, error.message));
     }
   },
 };
