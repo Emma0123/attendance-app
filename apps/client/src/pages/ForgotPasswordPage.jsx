@@ -1,12 +1,15 @@
 import { Box, Button, FormControl, Heading, Input, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { API_CALL } from "../helper";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
+    const navigate = useNavigate();
     const [ inEmail, setInEmail ] = useState();
 
     const onSend = async () => {
         const result = await API_CALL.post('/reset/email', {email: inEmail})
+        navigate('/');
         console.log("OnSend: ",result);
         // console.log(inEmail);
     };

@@ -1,8 +1,9 @@
-const { transporter } = require("../helper/mailer");
+const transporter = require("../helper/mailer");
 const { errorResponse } = require("../helper/utils")
 const { users } = require("../models");
 
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const { join } = require("path");
 require("dotenv").config({ path: join(__dirname, '../../.env') });
 
@@ -17,7 +18,15 @@ module.exports = {
                 throw { rc: 404, message: 'email not found' };
             }
             // console.log(email.dataValues.email);
-            const token = jwt.sign({ id: email.dataValues.id, email: email.dataValues.email }, process.env.SECRET_KEY, { expiresIn: '30m' })
+            const token = jwt.sign({ id: email.dataValues.id, email: email.dataValues.email }, process.env.SCRT_TKN, { expiresIn: '24h' })
+
+            // await transporter.verify((error, success) => {
+            //     if (error) {
+            //         console.log("Mailer error: ", error);
+            //     } else {
+            //         console.log("Mailer success: ", success);
+            //     }
+            // })
 
             //Send Email Confirmation
             await transporter.sendMail({
@@ -26,7 +35,7 @@ module.exports = {
                 subject: 'Reset Password',
                 text: 'Hello, Click below link to reset your password',
                 html: `<b>Reset your password</b>
-                <a href="http://localhost:5173/reset?tkn=${token}">Click Link</a>`
+                <a href="http://localhost:5173/reset-password?tkn=${token}">Click Link</a>`
             });
 
             return res.status(200).json({
@@ -41,22 +50,21 @@ module.exports = {
     },
     reset: async (req, res, next) => {
         try {
-            const data = jwt.verify(req.query.tkn, process.env.SECRET_KEY)
-            // console.log("JWT:", data);
+            const decode = jwt.verify(req.token, process.env.SCRT_TKN)
 
-            if (req.body.password === req.body.confirmPassword) {
-                await users.update(
-                    { password: req.body.password },
-                    {
-                        where: {
-                            email: data.email,
-                        }
+            const saltRounds = 10;
+            const password = await bcrypt.hash(req.body.newPassword, saltRounds)
+
+            const result = await users.update(
+                { password: password },
+                {
+                    where: {
+                        email: decode.email,
                     }
-                );
-                return res.status(200).json({success: true, message: "Password updated successfully"});
-            } else {
-                throw { rc: 400, message: 'Password not match' }
-            }
+                }
+            );
+
+            return res.status(200).json({ success: true, message: "Password updated successfully" });
 
         } catch (error) {
             next(errorResponse(error.rc || 500, false, error.message, null, error.stack))
