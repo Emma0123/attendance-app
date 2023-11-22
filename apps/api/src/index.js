@@ -3,11 +3,14 @@ require("dotenv").config({ path: join(__dirname, "../.env") });
 const express = require("express");
 const cors = require("cors");
 const { log } = require("console");
-const { resetPasswordRouter } = require("./router");
+const { resetPasswordRouter,usersRouter } = require("./router");
 const PORT = process.env.PORT || 2500;
 const app = express();
+const bearerToken = require("express-bearer-token")
+const cors = require("cors");
 app.use(express.json());
 app.use(cors());
+app.use(bearerToken())
 
 app.get("/api", (req, res) => {
   res.status(200).send("<h1>API in TURBOREPO</h1>");
@@ -15,6 +18,7 @@ app.get("/api", (req, res) => {
 
 // #define route here
 app.use('/reset', resetPasswordRouter)
+app.use("/users", usersRouter)
 
 // not found
 app.use((req, res, next) => {
