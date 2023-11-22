@@ -54,6 +54,7 @@ module.exports = {
       });
       console.log("INI RESULT BREE", result);
       const checkAcc = await bcrypt.compare(req.body.password, result.password);
+      
       if (checkAcc) {
         delete result.password;
         const { id, username, email, password, role } = result;
@@ -69,7 +70,7 @@ module.exports = {
             expiresIn: "1h",
           }
         );
-
+        // console.log("token:", token);
         return res.status(201).send({
           succes: true,
           result: {

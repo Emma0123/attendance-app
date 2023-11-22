@@ -5,6 +5,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../redux/silce/usersSlice";
+import { API_CALL } from "../../helper";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -14,13 +15,13 @@ const LoginPage = () => {
   });
   const [isVisible, setIsVisible] = useState(false);
   const [inUsername, setInUsername] = React.useState("");
-  const [inEmail, setInEmail] = React.useState("");
+  // const [inEmail, setInEmail] = React.useState("");
   const [inPassword, setInPassword] = React.useState("");
 
   const onLogin = async () => {
-    const response = await axios.post(`http://localhost:2002/users/login`, {
-      username: inUsername,
-      password: inPassword,
+    const response = await API_CALL.post('/users/login', {
+        username: inUsername,
+        password: inPassword,
     });
     console.log("INI RESPON", response.data.result.token);
     localStorage.setItem("bre", response.data.result.token);
@@ -85,7 +86,7 @@ const LoginPage = () => {
               Login
             </Button>
             <a
-              href="*"
+              href="/forgot-password"
               style={{
                 fontSize: "12px",
                 width: "28%",

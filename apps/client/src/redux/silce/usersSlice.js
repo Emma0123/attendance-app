@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_CALL } from "../../helper";
 
 const usersSlice = createSlice({
   name: "users",
@@ -36,11 +37,7 @@ export const checkDataUsers = () => {
         try {
             const token = localStorage.getItem("bre")
             if(token){
-                const getUsers = await axios.get(`http://localhost:2002/users/keeplogin`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
+                const getUsers = await API_CALL.get('/users/keeplogin',{headers: {'Authorization': `Bearer ${token}`}});
                 console.log("GET USERS BREE", getUsers);
                 localStorage.setItem("bre", getUsers.data.result.token)
 
