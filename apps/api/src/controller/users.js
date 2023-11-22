@@ -91,7 +91,7 @@ module.exports = {
 
   keepLogin: async (req, res, next) => {
     try {
-      console.log("bree ini usersData", req.usersData);
+      console.log("users controller keepLogin:", req.usersData);
       const result = await users.findOne({
         where: {
           id: req.usersData.id,

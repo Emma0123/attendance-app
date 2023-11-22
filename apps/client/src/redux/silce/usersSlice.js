@@ -36,8 +36,14 @@ export const checkDataUsers = () => {
     return async(dispatch) => {
         try {
             const token = localStorage.getItem("bre")
+            console.log("local storage token: ", token);
             if(token){
-                const getUsers = await API_CALL.get('/users/keeplogin',{headers: {'Authorization': `Bearer ${token}`}});
+                const getUsers = await axios.get(`http://localhost:2001/users/keeplogin`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                // const getUsers = await API_CALL.get('/users/keeplogin',{headers: {Authorization: `Bearer ${token}`}});
                 console.log("GET USERS BREE", getUsers);
                 localStorage.setItem("bre", getUsers.data.result.token)
 
