@@ -3,7 +3,7 @@ require("dotenv").config({ path: join(__dirname, "../.env") });
 const express = require("express");
 const cors = require("cors");
 const { log } = require("console");
-const { resetPasswordRouter,usersRouter } = require("./router");
+const { resetPasswordRouter,usersRouter, shiftRouter, attendanceRouter } = require("./router");
 const PORT = process.env.PORT || 2500;
 const app = express();
 const bearerToken = require("express-bearer-token")
@@ -18,6 +18,8 @@ app.get("/api", (req, res) => {
 // #define route here
 app.use('/reset', resetPasswordRouter)
 app.use("/users", usersRouter)
+app.use("/shift", shiftRouter)
+app.use("/attendance", attendanceRouter)
 
 // not found
 app.use((req, res, next) => {
@@ -34,7 +36,7 @@ app.use((err, req, res, next) => {
     console.error("Error : ", err);
     res.status(500).send(err);
   } else {
-    console.error("ERROR HANDLING: ",err.stack);
+    console.error("ERROR HANDLING: ",err);
     return res.status(err.rc || 500).json(err);
     // next();
   }

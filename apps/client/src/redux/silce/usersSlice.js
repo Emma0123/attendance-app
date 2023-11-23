@@ -5,6 +5,7 @@ import { API_CALL } from "../../helper";
 const usersSlice = createSlice({
   name: "users",
   initialState: {
+    id: null,
     email: "",
     username: "",
     password: "",
@@ -13,6 +14,7 @@ const usersSlice = createSlice({
   reducers: {
     login: (state, action) => {
       console.log("BREE PAYLOAD ATTENDANCE", action);
+      state.id = action.payload.id;
       state.email = action.payload.email;
       state.username = action.payload.username;
       state.password = action.payload.password;
@@ -20,6 +22,7 @@ const usersSlice = createSlice({
     },
     logout: (state, action) => {
       state = {
+        id: null,
         email: "",
         username: "",
         password: "",
@@ -38,12 +41,12 @@ export const checkDataUsers = () => {
             const token = localStorage.getItem("bre")
             console.log("local storage token: ", token);
             if(token){
-                const getUsers = await axios.get(`http://localhost:2001/users/keeplogin`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                // const getUsers = await API_CALL.get('/users/keeplogin',{headers: {Authorization: `Bearer ${token}`}});
+                // const getUsers = await axios.get(`http://localhost:2001/users/keeplogin`, {
+                //     headers: {
+                //         Authorization: `Bearer ${token}`
+                //     }
+                // })
+                const getUsers = await API_CALL.get('/users/keeplogin',{headers: {Authorization: `Bearer ${token}`}});
                 console.log("GET USERS BREE", getUsers.data.result);
                 localStorage.setItem("bre", getUsers.data.result.token)
 
