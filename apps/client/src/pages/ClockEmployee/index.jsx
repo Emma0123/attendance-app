@@ -32,22 +32,8 @@ const ClockPage = () => {
     console.log("get Shift:", result.data)
   }
 
-  const getLocation = () => {
-    const tgl = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
-    console.log("user ID:", userId);
-    console.log("username:", username);
-    console.log("Latitude:", geolocation.latitude);
-    console.log("Longitude:", geolocation.longitude);
-    console.log("Clock Out:", new Date(tgl));
-    console.log("tgl:", tgl);
-  }
-
   const handleClockIn = async () => {
     const coordinates = `${geolocation.latitude}, ${geolocation.longitude}`;
-    // console.log("user ID:", userId);
-    // console.log("shift ID:", shift.id);
-    // console.log("in:", new Date());
-    // console.log("location:", coordinates);
     try {
       await API_CALL.post('/attendance/clockin', {
         userId: userId,
@@ -76,11 +62,6 @@ const ClockPage = () => {
   }
 
   const handleClockOut = async () => {
-    // const coordinates = `${geolocation.latitude}, ${geolocation.longitude}`;
-    // console.log("user ID:", userId);
-    // console.log("shift ID:", shift.id);
-    // console.log("out:", new Date());
-    // console.log("location:", coordinates);
     try {
       await API_CALL.post('/attendance/clockout', {
         userId: userId,
@@ -117,7 +98,6 @@ const ClockPage = () => {
   }
 
   const handleShift = () => {
-    // await getShift();
     const tgl = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
     dataShift.forEach(({ id, name, start, end }) => {
       if (new Date() < new Date(tgl + ' ' + end) && new Date() > new Date(tgl + ' ' + start)) {
@@ -126,7 +106,6 @@ const ClockPage = () => {
     });
   };
 
-  // console.log(shift.name);
   return (
     <>
       <Flex h={"80px"} bg={"#F2F2F2"} border={"1px black solid"}>
