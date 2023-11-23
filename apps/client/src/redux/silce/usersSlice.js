@@ -44,13 +44,14 @@ export const checkDataUsers = () => {
                     }
                 })
                 // const getUsers = await API_CALL.get('/users/keeplogin',{headers: {Authorization: `Bearer ${token}`}});
-                console.log("GET USERS BREE", getUsers);
+                console.log("GET USERS BREE", getUsers.data.result);
                 localStorage.setItem("bre", getUsers.data.result.token)
 
-                dispatch(login(getUsers.data))
+                dispatch(login(getUsers.data.result))
             }
         } catch (error) {
-            dispatch(logout())
+          console.log("Midleware Error:",error);
+            // dispatch(logout())
         }
     }
 }
