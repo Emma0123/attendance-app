@@ -1,6 +1,15 @@
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
+import useGeolocation from "react-hook-geolocation"
 
 const ClockPage = () => {
+  const geolocation = useGeolocation();
+
+  const getLocation = () =>{
+    console.log("Latitude:", geolocation.latitude);
+    console.log("Longitude:", geolocation.longitude);
+    console.log("Clock Out:", new Date());
+  }
+
   return (
     <>
       <Flex h={"80px"} bg={"#F2F2F2"} border={"1px black solid"}>
@@ -17,7 +26,7 @@ const ClockPage = () => {
       </Box>
       <Flex h={"90px"} marginTop={"80px"} justifyContent={"space-evenly"}>
         <Button variant={"outline"} width={"30%"} colorScheme='blue' size={"auto"}>Clock In</Button>
-        <Button variant={"outline"} width={"30%"} colorScheme='blue' size={"auto"}>Clock Out</Button>
+        <Button variant={"outline"} width={"30%"} colorScheme='blue' size={"auto"} onClick={getLocation}>Clock Out</Button>
       </Flex>
     </>
   );
